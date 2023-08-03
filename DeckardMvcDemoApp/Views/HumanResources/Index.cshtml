@@ -1,0 +1,69 @@
+﻿<div class="text-center">
+	<h1>Human Resources</h1>
+</div>
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col">
+        <div class="card h-100 employeeCard">
+            <img src="/lib/images/employee.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Employees</h5>
+                <p class="card-text"></p>
+            </div>
+            <div class="card-footer">
+                <small class="text-body-secondary"></small>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 buildingCard">
+            <img src="/lib/images/building.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Buildings</h5>
+                <p class="card-text"></p>
+            </div>
+            <div class="card-footer">
+                <small class="text-body-secondary"></small>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 officeCard">
+            <img src="/lib/images/office.jpg
+" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Offices</h5>
+                <p class="card-text"></p>
+            </div>
+            <div class="card-footer">
+                <small class="text-body-secondary"></small>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+	<script>
+		$(function () {
+			// Change tabs
+			$(".nav-link").on("click", function () {
+				$(this).tab('show');
+			});
+            // Employee 
+            $(".employeeCard").on("click", function () {
+                window.location.href = '@Url.Action("Employee", "HumanResources")'
+            });
+            // Employee
+            $(".buildingCard").on("click", function () {
+                window.location.href = '@Url.Action("Building", "HumanResources")'
+            });
+            // Employee
+            $(".officeCard").on("click", function () {
+                window.location.href = '@Url.Action("Office", "HumanResources")'
+            });
+		});
+	</script>
+}
