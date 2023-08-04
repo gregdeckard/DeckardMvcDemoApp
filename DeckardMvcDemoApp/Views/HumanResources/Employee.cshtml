@@ -1,52 +1,45 @@
-﻿<h1>Employees</h1>
+﻿@using DeckardMvcDemoApp.ViewModels;
+@model EmployeeViewModel
 
-<div class="row">
+<h1>Employees</h1>
+
+<div class="row border border-1 border-dark p-2">
 	<div class="col-6">
-
+        <ul class="list-group">
+            @if (Model.Employees.Count == 0)
+            {
+                <li class="list-group-item">Where are all of your employees??!!!!</li>
+            }
+            else
+            {
+                @foreach (var employee in Model.Employees)
+                {
+                    <li href="*" class="list-group-item" id="@employee.Id">
+                        <div class="row">
+                            <div class="col-10">
+                                @employee.LastName, @employee.FirstName
+                            </div>
+                            <div class="col-2">
+                                <a asp-controller="HumanResources" asp-action="EmployeeEdit" asp-route-id="@employee.Id">Edit</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
 	</div>
-	<div class="col-6">
-        <form class="row g-3">
+	<div class="col-6 border border-2 p-2">
+        <form asp-controller="HumanResources" asp-action="EmployeeCreate" class="row g-3">
             <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">Email</label>
-                <input type="email" class="form-control" id="inputEmail4">
-            </div>
-            <div class="col-md-6">
-                <label for="inputPassword4" class="form-label">Password</label>
-                <input type="password" class="form-control" id="inputPassword4">
-            </div>
-            <div class="col-12">
-                <label for="inputAddress" class="form-label">Address</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-            </div>
-            <div class="col-12">
-                <label for="inputAddress2" class="form-label">Address 2</label>
-                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                <label class="form-label">Last Name</label>
+                <input asp-for="@Model.LastName" type="text" class="form-control" id="lastName">
             </div>
             <div class="col-md-6">
-                <label for="inputCity" class="form-label">City</label>
-                <input type="text" class="form-control" id="inputCity">
-            </div>
-            <div class="col-md-4">
-                <label for="inputState" class="form-label">State</label>
-                <select id="inputState" class="form-select">
-                    <option selected>Choose...</option>
-                    <option>...</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <label for="inputZip" class="form-label">Zip</label>
-                <input type="text" class="form-control" id="inputZip">
+                <label class="form-label">First Name</label>
+                <input asp-for="@Model.FirstName" type="text" class="form-control" id="firstName">
             </div>
             <div class="col-12">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="gridCheck">
-                    <label class="form-check-label" for="gridCheck">
-                        Check me out
-                    </label>
-                </div>
-            </div>
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Sign in</button>
+                <button type="submit" class="btn btn-primary" id="btnCreateEmployee">Quick Create</button>
             </div>
         </form>
 	</div>

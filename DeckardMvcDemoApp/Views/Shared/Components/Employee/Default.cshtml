@@ -1,0 +1,31 @@
+﻿@model Employee
+
+<div class="container mt-2 pb-2">
+	<div class="row gy-5">
+		<div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12" id="employeeDiv">
+			<ul id="employeeList" class="list-group listGroupSelected">
+				@foreach (var employee in Model.Employees)
+				{
+					<li class="card">
+						<div class="card-body">
+							<ul>
+								<li>
+									Last Name: <b>@employee.LastName</b>
+								</li>
+								<li>
+									First Name: @employee.FirstName
+								</li>
+								
+							</ul>
+						</div>
+					</li>
+				}
+			</ul>
+		</div>
+		<div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+			<div class="text-center">
+				<button class="btn btn-primary">Add New Employee</button>
+			</div>
+		</div>
+	</div>
+</div>

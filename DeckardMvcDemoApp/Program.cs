@@ -1,7 +1,14 @@
+using DeckardMvcDemoApp.DAL;
+using DeckardMvcDemoApp.DataAccess;
+using DeckardMvcDemoApp.Interfaces;
+using System.Data.SqlClient;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<DatabaseContext>();
+builder.Services.AddTransient<EmployeeRepository>();
 
 var app = builder.Build();
 
