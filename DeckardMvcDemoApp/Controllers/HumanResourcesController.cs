@@ -1,25 +1,23 @@
-﻿//using DeckardMvcDemoApp.DataAccess;
-using DeckardMvcDemoApp.DAL;
+﻿using DeckardMvcDemoApp.DAL;
 using DeckardMvcDemoApp.Models;
 using DeckardMvcDemoApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Diagnostics;
-using System.Linq;
-using System.Web;
+
 
 namespace DeckardMvcDemoApp.Controllers
 {
     public class HumanResourcesController : Controller
     {
+        private Building _building;
+        private BuildingRepository _buildingRepository;
         private Employee _employee;
         private EmployeeViewModel _employeeViewModel;
         private EmployeeRepository _employeeRepository;
 
-        public HumanResourcesController(EmployeeRepository employeeRepository, HelperRepository helperRepository)
+        public HumanResourcesController(BuildingRepository buildingRepository, EmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
-
+            _buildingRepository = buildingRepository;
         }
 
         public IActionResult Index()
@@ -27,9 +25,51 @@ namespace DeckardMvcDemoApp.Controllers
             return View();
         }
 
-        public IActionResult Building()
+        public async Task<IActionResult> Building()
         {
-            return View();
+            _building = new Building();
+            _building = await _buildingRepository.GetBuildings();
+            var localBuildingViewModel = new BuildingViewModel();
+            localBuildingViewModel = CreateBuildingViewModel(_building);
+            return View(localBuildingViewModel);
+        }
+
+        public async Task<IActionResult> BuildingUpdate(int id)
+        {
+            _building = new Building();
+            _building = await _buildingRepository.GetBuildingById(id);
+            var localBuildingViewModel = new BuildingViewModel();
+            localBuildingViewModel = CreateBuildingViewModel(_building);
+            return View(localBuildingViewModel);
+        }
+
+        public async Task<IActionResult> CreateBuilding([Bind("Name")] Building building)
+        {
+            var numInserted = await _buildingRepository.CreateBuilding(building);
+            return RedirectToAction("Building");
+        }
+
+        public async Task<IActionResult> UpdateBuilding([Bind("Id", "Name")] Building building)
+        {
+            var numInserted = await _buildingRepository.UpdateBuilding(building);
+            return RedirectToAction("Building");
+        }
+
+        public BuildingViewModel CreateBuildingViewModel(Building buildings) 
+        { 
+            var buildingViewModel = new BuildingViewModel();
+            buildingViewModel.Id = buildings.Id;
+            buildingViewModel.Name = buildings.Name;
+
+            foreach (var building in buildings.Buildings)
+            {
+                var localBuilding = new Building();
+                localBuilding.Id = building.Id;
+                localBuilding.Name = building.Name;
+                buildingViewModel.Buildings.Add(localBuilding);
+            }
+
+            return buildingViewModel;
         }
 
         public async Task<IActionResult> Employee()
@@ -77,8 +117,6 @@ namespace DeckardMvcDemoApp.Controllers
 
 			return _employeeViewModel;
         }
-
-
 
         public IActionResult Office()
         {

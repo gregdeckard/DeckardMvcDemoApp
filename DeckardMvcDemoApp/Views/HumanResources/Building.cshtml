@@ -1,1 +1,45 @@
-﻿<h1>Buildings</h1>
+﻿@using DeckardMvcDemoApp.ViewModels;
+@model BuildingViewModel
+
+<h1>Buildings</h1>
+
+<div class="row border border-1 border-dark p-2">
+    <div class="col-6">
+        <ul class="list-group">
+            @if (Model.Buildings.Count == 0)
+            {
+                <li class="list-group-item">Where are all of your buildings??!!!!</li>
+            }
+            else
+            {
+                @foreach (var building in Model.Buildings)
+                {
+                    <li href="*" class="list-group-item" id="@building.Id">
+                        <div class="row">
+                            <div class="col-10">
+                                @building.Name
+                            </div>
+                            <div class="col-2">
+                                <a asp-controller="HumanResources" asp-action="BuildingUpdate" asp-route-id="@building.Id" class=""><i class="fa-solid fa-pen-to-square"></i></a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+    <div class="col-6 border border-2 p-2">
+        <form asp-controller="HumanResources" asp-action="CreateBuilding" class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Name</label>
+                <input asp-for="@Model.Name" type="text" class="form-control" id="lastName">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary" id="btnCreateBuilding">Quick Create</button>
+            </div>
+        </form>
+    </div>
+    <div class="mt-3">
+        <a asp-controller="HumanResources" asp-action="Index"> Back to HR Main Page </a>
+    </div>
+</div>

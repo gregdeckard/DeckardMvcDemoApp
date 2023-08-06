@@ -8,8 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<DatabaseContext>();
+builder.Services.AddTransient<BuildingRepository>();
 builder.Services.AddTransient<EmployeeRepository>();
-builder.Services.AddTransient<HelperRepository>();
+//builder.Services.AddTransient<HelperRepository>();
 
 var app = builder.Build();
 
