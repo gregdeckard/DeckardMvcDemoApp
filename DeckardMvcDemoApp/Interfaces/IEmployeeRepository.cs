@@ -5,7 +5,9 @@ namespace DeckardMvcDemoApp.Interfaces
 {
     public interface IEmployeeRepository
     {
+        Task<int> CreateEmployee(Employee employee);
         Task<Employee> GetEmployees();
-        Employee GetEmployeeById(int id);
+        Task<Employee> GetEmployeeById(int id);
+        Task<int> UpdateEmployee(Employee employee);
     }
 }

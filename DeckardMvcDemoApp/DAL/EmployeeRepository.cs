@@ -16,12 +16,7 @@ namespace DeckardMvcDemoApp.DAL
         public EmployeeRepository(DatabaseContext databaseContext)
         {
             _databaseContext = databaseContext;
-        }
-
-        public Employee GetEmployeeById(int id)
-        {
             _employee = new Employee();
-            return _employee;
         }
 
         public async Task<int> CreateEmployee(Employee employee)
@@ -71,6 +66,53 @@ namespace DeckardMvcDemoApp.DAL
             }
 
             return _employee;
+        }
+
+        public async Task<Employee> GetEmployeeById(int id)
+        {
+			_employee = new Employee();
+			SqlDataReader dataReader = null;
+
+			using (SqlConnection con = new SqlConnection(_databaseContext.GetConnectionString()))
+			{
+				SqlCommand cmd = new SqlCommand("GetEmployeeById", con);
+				cmd.CommandType = CommandType.StoredProcedure;
+				cmd.Parameters.Add("@id", SqlDbType.Int).SqlValue = id;
+				con.Open();
+
+				dataReader = await cmd.ExecuteReaderAsync();
+				using (dataReader)
+				{
+					while (await dataReader.ReadAsync())
+					{
+						_employee.Id = (int)dataReader["Id"];
+						_employee.LastName = (string)dataReader["LastName"];
+                        _employee.FirstName = (string)dataReader["FirstName"];
+					}
+				}
+
+				con.Close();
+			}
+
+			return _employee;
+		}
+
+        public async Task<int> UpdateEmployee(Employee employee)
+        {
+            var recordsUpdated = 0;
+            using (SqlConnection con = new SqlConnection(_databaseContext.GetConnectionString()))
+            {
+                SqlCommand cmd = new SqlCommand("UpdateEmployee", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@id", SqlDbType.Int).SqlValue = employee.Id;
+                cmd.Parameters.Add("@lastName", SqlDbType.NVarChar).SqlValue = employee.LastName;
+                cmd.Parameters.Add("@firstName", SqlDbType.NVarChar).SqlValue = employee.FirstName;
+                con.Open();
+                recordsUpdated = await cmd.ExecuteNonQueryAsync();
+                con.Close();
+            }
+
+            return recordsUpdated;
         }
     }
 }
