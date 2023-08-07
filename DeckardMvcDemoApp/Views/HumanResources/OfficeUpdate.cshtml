@@ -1,0 +1,25 @@
+﻿@using DeckardMvcDemoApp.ViewModels;
+@model OfficeViewModel
+
+<h1>Update Office</h1>
+
+<div>
+    <form asp-controller="HumanResources" asp-action="UpdateOffice" class="row g-3">
+        <input asp-for="@Model.Id" type="text" value="@Model.Id" hidden="hidden" />
+        <input asp-for="@Model.BuildingId" type="text" value="@Model.BuildingId" hidden="hidden" />
+        <div class="col-md-6">
+            <label for="OfficeNumber" class="form-label">Office Number</label>
+            <input asp-for="@Model.OfficeNumber" type="text" class="form-control" value="@Model.OfficeNumber" required>
+        </div>
+        <div class="col-md-6">
+            <label for="BuildingName" class="form-label">Building Name</label>
+            <input asp-for="@Model.BuildingName" type="text" class="form-control" value="@Model.BuildingName" disabled="disabled">
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+    </form>
+    <div class="mt-3">
+        <a asp-controller="HumanResources" asp-action="Office" asp-route-id="@Model.Id"> Back to Building List </a>
+    </div>
+</div>

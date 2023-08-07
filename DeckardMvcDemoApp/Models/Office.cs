@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public int OfficeNumber { get; set; }
         public int BuildingId { get; set; }
-        public List<Office> OfficeList { get; set;} = new List<Office>();
+        public string BuildingName { get; set; }
+        public List<Office> Offices { get; set;} = new List<Office>();
     }
 }

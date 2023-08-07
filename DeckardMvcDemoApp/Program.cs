@@ -10,6 +10,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<DatabaseContext>();
 builder.Services.AddTransient<BuildingRepository>();
 builder.Services.AddTransient<EmployeeRepository>();
+builder.Services.AddTransient<OfficeRepository>();
 //builder.Services.AddTransient<HelperRepository>();
 
 var app = builder.Build();

@@ -2,7 +2,7 @@
 using DeckardMvcDemoApp.Models;
 using DeckardMvcDemoApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DeckardMvcDemoApp.Controllers
 {
@@ -13,11 +13,15 @@ namespace DeckardMvcDemoApp.Controllers
         private Employee _employee;
         private EmployeeViewModel _employeeViewModel;
         private EmployeeRepository _employeeRepository;
+        private Office _office;
+        private OfficeViewModel _officeViewModel;
+        private OfficeRepository _officeRepository;
 
-        public HumanResourcesController(BuildingRepository buildingRepository, EmployeeRepository employeeRepository)
+        public HumanResourcesController(BuildingRepository buildingRepository, EmployeeRepository employeeRepository, OfficeRepository officeRepository)
         {
-            _employeeRepository = employeeRepository;
             _buildingRepository = buildingRepository;
+            _employeeRepository = employeeRepository;
+            _officeRepository = officeRepository;
         }
 
         public IActionResult Index()
@@ -53,6 +57,21 @@ namespace DeckardMvcDemoApp.Controllers
         {
             var numInserted = await _buildingRepository.UpdateBuilding(building);
             return RedirectToAction("Building");
+        }
+
+        public List<SelectListItem> GetBuildingDropdown(Building buildings)
+        {
+            List<SelectListItem> buildingList = new List<SelectListItem>();
+            buildings.Buildings = buildings.Buildings.OrderBy(x => x.Name).ToList();
+            foreach (var building in buildings.Buildings)
+            {
+                var localBuilding = new SelectListItem();
+                localBuilding.Value = building.Id.ToString();
+                localBuilding.Text = building.Name;
+                buildingList.Add(localBuilding);
+            }
+            
+            return buildingList;
         }
 
         public BuildingViewModel CreateBuildingViewModel(Building buildings) 
@@ -118,9 +137,67 @@ namespace DeckardMvcDemoApp.Controllers
 			return _employeeViewModel;
         }
 
-        public IActionResult Office()
+        public async Task<IActionResult> Office()
         {
-            return View();
+            // Get Office data
+            _office = new Office();
+            _office = await _officeRepository.GetOffices();
+            var localOfficeViewModel = new OfficeViewModel();
+            localOfficeViewModel = CreateOfficeViewModel(_office);
+
+            // Get Building data
+            _building = new Building();
+            _building = await _buildingRepository.GetBuildings();
+            var localBuildingList = new List<SelectListItem>();
+            localBuildingList = GetBuildingDropdown(_building);
+            
+            // Add Building data to use in dropdown
+            localOfficeViewModel.Buildings = localBuildingList;
+
+            return View(localOfficeViewModel);
+        }
+
+        public async Task<IActionResult> OfficeUpdate(int id)
+        {
+            _office = new Office();
+            _office = await _officeRepository.GetOfficeById(id);
+            var localOfficeViewModel = new OfficeViewModel();
+            localOfficeViewModel = CreateOfficeViewModel(_office);
+            return View(localOfficeViewModel);
+        }
+
+        public async Task<IActionResult> CreateOffice([Bind("OfficeNumber, BuildingId")] Office office)
+        {
+            var numInserted = await _officeRepository.CreateOffice(office);
+            return RedirectToAction("Office");
+        }
+
+        public async Task<IActionResult> UpdateOffice([Bind("Id", "OfficeNumber", "BuildingId")] Office office)
+        {
+            var numInserted = await _officeRepository.UpdateOffice(office);
+            return RedirectToAction("Office");
+        }
+
+        public OfficeViewModel CreateOfficeViewModel(Office offices)
+        {
+            _officeViewModel = new OfficeViewModel();
+            _officeViewModel.Id = offices.Id;
+            _officeViewModel.OfficeNumber = offices.OfficeNumber;
+            _officeViewModel.BuildingId = offices.BuildingId;
+            _officeViewModel.BuildingName = offices.BuildingName;
+
+            foreach (var office in offices.Offices)
+            {
+                var localOffice = new Office();
+                localOffice.Id = office.Id;
+                localOffice.OfficeNumber = office.OfficeNumber;
+                localOffice.BuildingId = office.BuildingId;
+                localOffice.BuildingName = office.BuildingName;
+
+                _officeViewModel.Offices.Add(localOffice);
+            }
+
+            return _officeViewModel;
         }
     }
 }
