@@ -8,13 +8,13 @@ namespace DeckardMvcDemoApp.Controllers
 {
     public class HumanResourcesController : Controller
     {
-        private Building _building;
+        private Building _building = new Building();
         private BuildingRepository _buildingRepository;
-        private Employee _employee;
-        private EmployeeViewModel _employeeViewModel;
+        private Employee _employee = new Employee();
+        private EmployeeViewModel _employeeViewModel = new EmployeeViewModel();
         private EmployeeRepository _employeeRepository;
-        private Office _office;
-        private OfficeViewModel _officeViewModel;
+        private Office _office = new Office();
+        private OfficeViewModel _officeViewModel = new OfficeViewModel();
         private OfficeRepository _officeRepository;
 
         public HumanResourcesController(BuildingRepository buildingRepository, EmployeeRepository employeeRepository, OfficeRepository officeRepository)
@@ -59,28 +59,28 @@ namespace DeckardMvcDemoApp.Controllers
             return RedirectToAction("Building");
         }
 
-        public List<SelectListItem> GetBuildingDropdown(Building buildings)
+        public List<SelectListItem> GetBuildingDropdown(Building buildingList)
         {
-            List<SelectListItem> buildingList = new List<SelectListItem>();
-            buildings.Buildings = buildings.Buildings.OrderBy(x => x.Name).ToList();
-            foreach (var building in buildings.Buildings)
+            List<SelectListItem> localBuildingList = new List<SelectListItem>();
+            buildingList.Buildings = buildingList.Buildings.OrderBy(x => x.Name).ToList();
+            foreach (var building in buildingList.Buildings)
             {
                 var localBuilding = new SelectListItem();
                 localBuilding.Value = building.Id.ToString();
                 localBuilding.Text = building.Name;
-                buildingList.Add(localBuilding);
+                localBuildingList.Add(localBuilding);
             }
             
-            return buildingList;
+            return localBuildingList;
         }
 
-        public BuildingViewModel CreateBuildingViewModel(Building buildings) 
+        public BuildingViewModel CreateBuildingViewModel(Building buildingList) 
         { 
             var buildingViewModel = new BuildingViewModel();
-            buildingViewModel.Id = buildings.Id;
-            buildingViewModel.Name = buildings.Name;
+            buildingViewModel.Id = buildingList.Id;
+            buildingViewModel.Name = buildingList.Name;
 
-            foreach (var building in buildings.Buildings)
+            foreach (var building in buildingList.Buildings)
             {
                 var localBuilding = new Building();
                 localBuilding.Id = building.Id;
@@ -178,15 +178,15 @@ namespace DeckardMvcDemoApp.Controllers
             return RedirectToAction("Office");
         }
 
-        public OfficeViewModel CreateOfficeViewModel(Office offices)
+        public OfficeViewModel CreateOfficeViewModel(Office officeList)
         {
             _officeViewModel = new OfficeViewModel();
-            _officeViewModel.Id = offices.Id;
-            _officeViewModel.OfficeNumber = offices.OfficeNumber;
-            _officeViewModel.BuildingId = offices.BuildingId;
-            _officeViewModel.BuildingName = offices.BuildingName;
+            _officeViewModel.Id = officeList.Id;
+            _officeViewModel.OfficeNumber = officeList.OfficeNumber;
+            _officeViewModel.BuildingId = officeList.BuildingId;
+            _officeViewModel.BuildingName = officeList.BuildingName;
 
-            foreach (var office in offices.Offices)
+            foreach (var office in officeList.Offices)
             {
                 var localOffice = new Office();
                 localOffice.Id = office.Id;
