@@ -93,11 +93,20 @@ namespace DeckardMvcDemoApp.Controllers
 
         public async Task<IActionResult> Employee()
         {
-            _employee = new Employee();
-			_employee = await _employeeRepository.GetEmployees();
-            var localEmployeeViewModel = new EmployeeViewModel();
-			localEmployeeViewModel = CreateEmployeeViewModel(_employee);
-            return View(localEmployeeViewModel);
+            try
+            {
+                _employee = new Employee();
+                _employee = await _employeeRepository.GetEmployees();
+                var localEmployeeViewModel = new EmployeeViewModel();
+                localEmployeeViewModel = CreateEmployeeViewModel(_employee);
+                return View(localEmployeeViewModel);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+            
         }
 
         public async Task<IActionResult> EmployeeUpdate(int id)
