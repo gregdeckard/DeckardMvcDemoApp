@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'DeckardMvcDemo'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_14AB7BC6573B443A927809E10A010FED }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2359088410A9459798DE20BAF7E3C6A7 }}
           package: .
